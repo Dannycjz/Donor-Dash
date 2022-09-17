@@ -131,17 +131,19 @@ def donor():
 
     return render_template("donor_map.html")
 
-@app.route("/receiver_form")
+@app.route("/receiver_form", methods=["GET"])
 # View for receiver to fill out form
 def receiver_form():
-    # User reached route via POST
+    # Opens up the form for the user to use
+    if request.method == "GET":
+        return render_template('formAdmin.html')
+
+
+@app.route("/receiver_submit", methods=["POST"])
+def receiver_submit():
     if request.method == "POST":
-        # Displays html form for receiver
-
-        # Loads data into database
-
         return None
-    return None
+
 
 @app.route("/receiver_map")
 # Map view for receiver to ping location
