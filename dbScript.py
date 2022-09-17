@@ -53,12 +53,12 @@ cursor.execute('''
 
 df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'user_id', 'donation_scores', 'x', 'y'])
 
-for user_id in df.user_id:
-    cursor.execute(f'''
-                SELECT * FROM users WHERE user_id = {user_id}
-                ''')
-    df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
-    print(df2)
+# for user_id in df.user_id:
+#     cursor.execute(f'''
+#                 SELECT * FROM donations WHERE user_id = {user_id}
+#                 ''')
+#     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
+
 
 # db.commit()
 # print(df)
