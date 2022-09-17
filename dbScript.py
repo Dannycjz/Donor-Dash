@@ -7,17 +7,17 @@ import pandas as pd
 db = sqlite3.connect('donations') 
 cursor = db.cursor()
 
-# cursor.execute('''
-#         CREATE TABLE IF NOT EXISTS users
-#         ([user_id]INTEGER PRIMARY KEY, [user_name] TEXT, [password] TEXT, 
-#         [user_score] INTEGER)
-#         ''')
+cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users
+         ([user_id]INTEGER PRIMARY KEY, [user_name] TEXT, [password] TEXT, 
+         [user_score] INTEGER)
+         ''')
     
-# cursor.execute('''
-#         INSERT INTO users (user_id, user_name, password, user_score)
-#         VALUES
-#         ("1", 'Rex', 'sharktruck', '20')
-#         ''')
+cursor.execute('''
+         INSERT INTO users (user_id, user_name, password, user_score)
+         VALUES
+         ("1", 'Rex', 'rexrex', '20')
+         ''')
 
 # cursor.execute('''
 #         INSERT INTO users (user_id, user_name, password, user_score)
@@ -31,25 +31,25 @@ cursor = db.cursor()
 #         ("3", 'Danny', 'sharktruck3', '40')
 #         ''')
 
-# cursor.execute('''
-#         CREATE TABLE IF NOT EXISTS donations
-#         ([donation_id]INTEGER PRIMARY KEY, [object] TEXT, [cause] TEXT,  
-#         [user_id] INTEGER, [donation_scores] INTEGER, [x] REAL, [y] REAL, 
-#         FOREIGN KEY(user_id)
-#             REFERENCES users (user_id))
-#         ''')
+cursor.execute('''
+         CREATE TABLE IF NOT EXISTS donations
+         ([donation_id]INTEGER PRIMARY KEY, [object] TEXT, [cause] TEXT,  
+         [user_id] INTEGER, [donation_scores] INTEGER, [x] REAL, [y] REAL, 
+         FOREIGN KEY(user_id)
+             REFERENCES users (user_id))
+         ''')
 
-# cursor.execute('''
-#         INSERT INTO donations (object, cause, user_id, donation_scores, x, y)
-#         VALUES
-#         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
-#         ''')
+cursor.execute('''
+         INSERT INTO donations (object, cause, user_id, donation_scores, x, y)
+         VALUES
+         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
+         ''')
 
-cursor.execute(f'''
-        DELETE FROM donations 
-        WHERE
-        donation_id == 2
-        ''')
+# cursor.execute(f'''
+#        DELETE FROM donations 
+#        WHERE
+#        donation_id == 2
+#        ''')
 
 # cursor.execute('''
 #                 SELECT * FROM donations
@@ -66,10 +66,5 @@ cursor.execute(f'''
 #     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
 
-<<<<<<< HEAD
 db.commit()
 #print(df)
-=======
-# db.commit()
-print(df)
->>>>>>> c00979f77f1a81ddb4def789e9692e584bf575a1
