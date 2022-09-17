@@ -31,20 +31,20 @@
       }).setView([40.441, -79.945], 3)
       map.setZoom(16);
 
+    var marker = L.marker([40.441, -79.945]).addTo(map);
+    marker.bindPopup("<b>New Event</b><br>A bulk of deers are here!<br><br><button>View Details</button>");
+    var popup = L.popup();
+
     function onMapClick(e) {
     popup
         .setLatLng(e.latlng)
-        .setContent("<input type='checkbox' id='confirmation' name='confirmation'></input><label for='confirmation'> Please confirm your location?</label><br><button>Submit</button>")
+        .setContent("<form method=post><input type='hidden' id='latitude' name='latitude' value=" + e.latlng.lat + "></input><input type='hidden' id='longitude' name='longitude' value=" + e.latlng.lng + "></input><input type='checkbox' id='confirmation' name='confirmation'></input><label for='confirmation'> Please confirm your location?</label><br><button>Submit</button><form>")
         .openOn(map);
-        var marker2 = L.marker(e.latlng).addTo(map);
-        marker2.bindPopup("<b>Your Location</b><button>View Details</button>");
-        $.ajax({
-            type: 'POST', 
-            url: '/receiver_form', 
-            data: {"latitude": e.latlng.lat, "longitude": e.latlng.lng}
-        })
-    }
+        var marker = L.marker(e.latlng).addTo(map);
+        marker.bindPopup("<b>Your Location</b><button>View Details</button>");
+      }
     map.on('click', onMapClick);
+    
 
     </script>
 {% endblock %}
