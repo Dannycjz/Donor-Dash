@@ -19,6 +19,7 @@ cursor.execute('''
         ("1", 'Rex', 'sharktruck', '20')
         ''')
 
+
 cursor.execute('''
         INSERT INTO users (user_id, user_name, password, user_score)
         VALUES
@@ -44,6 +45,7 @@ cursor.execute('''
         VALUES
         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
         ''')
+
 
 # cursor.execute(f'''
 #         DELETE FROM donations 
