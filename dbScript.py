@@ -9,47 +9,49 @@ cursor = db.cursor()
 
 cursor.execute('''
         CREATE TABLE IF NOT EXISTS users
-         ([user_id]INTEGER PRIMARY KEY, [user_name] TEXT, [password] TEXT, 
-         [user_score] INTEGER)
-         ''')
+        ([user_id]INTEGER PRIMARY KEY, [user_name] TEXT, [password] TEXT, 
+        [user_score] INTEGER)
+        ''')
     
 cursor.execute('''
-         INSERT INTO users (user_id, user_name, password, user_score)
-         VALUES
-         ("1", 'Rex', 'rexrex', '20')
-         ''')
+        INSERT INTO users (user_id, user_name, password, user_score)
+        VALUES
+        ("1", 'Rex', 'sharktruck', '20')
+        ''')
 
-# cursor.execute('''
-#         INSERT INTO users (user_id, user_name, password, user_score)
-#         VALUES
-#         ("2", 'Talay', 'sharktruck2', '30')
-#         ''')
-
-# cursor.execute('''
-#         INSERT INTO users (user_id, user_name, password, user_score)
-#         VALUES
-#         ("3", 'Danny', 'sharktruck3', '40')
-#         ''')
 
 cursor.execute('''
-         CREATE TABLE IF NOT EXISTS donations
-         ([donation_id]INTEGER PRIMARY KEY, [object] TEXT, [cause] TEXT,  
-         [user_id] INTEGER, [donation_scores] INTEGER, [x] REAL, [y] REAL, 
-         FOREIGN KEY(user_id)
-             REFERENCES users (user_id))
-         ''')
+        INSERT INTO users (user_id, user_name, password, user_score)
+        VALUES
+        ("2", 'Talay', 'sharktruck2', '30')
+        ''')
 
 cursor.execute('''
-         INSERT INTO donations (object, cause, user_id, donation_scores, x, y)
-         VALUES
-         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
-         ''')
+        INSERT INTO users (user_id, user_name, password, user_score)
+        VALUES
+        ("3", 'Danny', 'sharktruck3', '40')
+        ''')
+
+cursor.execute('''
+        CREATE TABLE IF NOT EXISTS donations
+        ([donation_id]INTEGER PRIMARY KEY, [object] TEXT, [cause] TEXT,  
+        [user_id] INTEGER, [donation_scores] INTEGER, [x] REAL, [y] REAL, 
+        FOREIGN KEY(user_id)
+            REFERENCES users (user_id))
+        ''')
+
+cursor.execute('''
+        INSERT INTO donations (object, cause, user_id, donation_scores, x, y)
+        VALUES
+        ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
+        ''')
+
 
 # cursor.execute(f'''
-#        DELETE FROM donations 
-#        WHERE
-#        donation_id == 2
-#        ''')
+#         DELETE FROM donations 
+#         WHERE
+#         donation_id == 2
+#         ''')
 
 # cursor.execute('''
 #                 SELECT * FROM donations
@@ -67,4 +69,4 @@ cursor.execute('''
 
 
 db.commit()
-#print(df)
+# print(df)
