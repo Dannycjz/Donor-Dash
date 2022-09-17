@@ -115,6 +115,27 @@ def logout():
 def donor():
     form = request.form
     if request.method == "POST":
+        difficulty = form.get("difficulty")
+        user_id = session.get("user_id")[0]
+        db = sqlite3.connect("donations")
+
+        c = db.cursor()
+        c.execute(f'''
+                SELECT * FROM users 
+                WHERE 
+                user_id = {user_id}
+                ''')
+        data = c.fetchall()
+        curr_val = data[0][3]
+        curr_val += int(difficulty)
+        c.execute(f'''
+                UPDATE users
+                    SET 
+                        user_score = {curr_val}
+                    WHERE
+                        user_id = {user_id}
+                    ''')
+        db.commit()
         # Show info once ping is clicked
         return redirect("/donation_confirmation")
 
@@ -137,7 +158,7 @@ def donor():
     locations=[]
 
     for index, row in df.iterrows():
-        locations.append((row["x"], row["y"], row['object'], row['cause']))
+        locations.append((row["x"], row["y"], row['object'], row['cause'], row['donation_scores']))
 
     # Render map + Receiver pings
     return render_template("donor_map.html", locations=locations, form=form)
@@ -215,6 +236,13 @@ def receiver_map():
 
     # Renders the empty map image if method = GET
     return render_template("receiver_map.html", form=form)
+
+@app.route("/donation_confirmation", methods=["GET"])
+# Map view for receiver to ping location
+def donation_confirmation():
+
+    return render_template("donation_confirmation.html")
+
 
 if __name__=="__main__":
     app.run()
