@@ -45,13 +45,19 @@ cursor = db.cursor()
 #         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
 #         ''')
 
-cursor.execute('''
-                SELECT * FROM donations
-                ''')
+cursor.execute(f'''
+        DELETE FROM donations 
+        WHERE
+        donation_id == 2
+        ''')
+
+# cursor.execute('''
+#                 SELECT * FROM donations
+#                 ''')
 
 # df=pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
-df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'user_id', 'donation_scores', 'x', 'y'])
+# df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'user_id', 'donation_scores', 'x', 'y'])
 
 # for user_id in df.user_id:
 #     cursor.execute(f'''
@@ -60,5 +66,5 @@ df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'u
 #     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
 
-# db.commit()
-# print(df)
+db.commit()
+#print(df)

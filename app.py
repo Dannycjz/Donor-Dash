@@ -173,24 +173,26 @@ def receiver_map():
     if request.method == "POST":
         # Only add to database if user confirms
         if form.get("confirmation"):
+            print(form)
             # Parse location data
-            latitude = request.json["latitude"]
-            longitude = request.json["longitude"]
+            latitude = form.get("latitude")
+            longitude = form.get("longitude")
 
-            user_name = session.get('user_id')[1]
+            user_id = session.get('user_id')[0]
 
             # Stores the user's geolocation into database
             db = sqlite3.connect("donations")
-            cursor = db.cursor
 
-            cursor.execute(f'''
+            db.execute(f'''
                     UPDATE donations
                     SET 
                         x = {latitude},
                         y = {longitude}
                     WHERE
-                        user_name = {user_name}
+                        user_id = {user_id}
                     ''')
+            
+            db.commit()
 
             # Returns render template of end page after storing data
         
