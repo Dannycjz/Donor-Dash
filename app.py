@@ -23,7 +23,7 @@ Session(app)
 def homepage():
     if not session.get('user_id'):
             return redirect('/login')
-    return render_template("mainPage.html")
+    return render_template("newMainPage.html")
 
 @app.route('/register', methods=["GET", "POST"])
 # Registers a new user
@@ -143,6 +143,8 @@ def donor():
     # Render map + Receiver pings
     return render_template("donor_map.html", locations=encoded)
 
+
+
 @app.route("/receiver_form", methods=["GET", "POST"])
 # View for receiver to fill out form
 def receiver_form():
@@ -156,16 +158,22 @@ def receiver_form():
         c=db.cursor()
 
         form = request.form
-        print(form)
 
         script='''INSERT INTO donations 
                 (object, cause, user_id, donation_scores, x, y) 
                     VALUES 
                     (?, ?, ?, ?, ?, ?)'''
-        values=(form['object'], form['cause'], session.get('user_id'), form['donation_scores'], None, None)
+        values=(form['object'], form['cause'], session.get('user_id')[0], form['donation_scores'], None, None)
         # Insert donation info into database
         c.execute(script, values)
-        db.commit()
+        db.commit() 
+
+        script2='''SELECT * FROM donations WHERE object = ? AND 
+                    user_id = ?'''
+        values2 = (form['object'], session.get('user_id')[0])
+        c.execute(script2, values2)
+        donation_line=c.fetchall()
+        session["donation_id"] = donation_line[0][0]
         return redirect("/receiver_map")
 
 
@@ -204,6 +212,7 @@ def receiver_map():
             db.commit()
 
             # Returns render template of end page after storing data
+            return render_template("confirmation.html")
         
 
     # Renders the empty map image if method = GET
