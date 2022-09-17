@@ -22,7 +22,7 @@ Session(app)
 def homepage():
     if not session.get('user_id'):
             return redirect('/login')
-    return render_template("mainPage.html")
+    return render_template("newMainPage.html")
 
 @app.route('/register', methods=["GET", "POST"])
 # Registers a new user
@@ -203,6 +203,7 @@ def receiver_map():
             db.commit()
 
             # Returns render template of end page after storing data
+            return render_template("confirmation.html")
         
 
     # Renders the empty map image if method = GET
