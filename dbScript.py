@@ -20,6 +20,7 @@ cursor.execute('''
         ''')
 
 
+
 cursor.execute('''
         INSERT INTO users (user_id, user_name, password, user_score)
         VALUES
@@ -33,6 +34,7 @@ cursor.execute('''
         ''')
 
 cursor.execute('''
+
         CREATE TABLE IF NOT EXISTS donations
         ([donation_id]INTEGER PRIMARY KEY, [object] TEXT, [cause] TEXT,  
         [user_id] INTEGER, [donation_scores] INTEGER, [x] REAL, [y] REAL, 
@@ -45,6 +47,7 @@ cursor.execute('''
         VALUES
         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
         ''')
+
 
 
 # cursor.execute(f'''

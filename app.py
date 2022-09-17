@@ -237,11 +237,49 @@ def receiver_map():
     # Renders the empty map image if method = GET
     return render_template("receiver_map.html", form=form)
 
+
 @app.route("/donation_confirmation", methods=["GET"])
 # Map view for receiver to ping location
 def donation_confirmation():
 
     return render_template("donation_confirmation.html")
+
+@app.route("/confirming", methods=["GET", "POST"])
+def confirming():
+    if request.method == "GET":
+        db=sqlite3.connect("donations")
+        cursor=db.cursor()
+        form = request.form
+    # access into form using dictionary, c is the database that we execute on (SQL commands)
+    # need to get redirected from receiver_map (danny needs to finish)
+        print(form)
+        return render_template('confirmation.html', info = session.get('user_id')[1])
+        
+    #if request.method == "POST": 
+
+@app.route("/leaderboard", methods=["GET", "POST"])
+def leaderboard():
+    if request.method == "GET":
+        db=sqlite3.connect("donations")
+        cursor=db.cursor()
+        cursor.execute('''
+                SELECT * FROM users
+                ''')
+        # returns as a list of tuples, where index 3 is score, index 1 is user_id, etc.
+        allCols = cursor.fetchall()
+        allCols.sort(reverse=True, key=sortByScore)
+        print("what")
+        nums = len(allCols)
+        ranks = []
+        for i in range(1, nums+1):
+            ranks.append(i)
+        return render_template('leaderboard.html', donorInfo = allCols, nums = ranks)
+    # access into form using dictionary, c is the database that we execute on (SQL commands)
+    # leaderboard (based on rank)
+
+def sortByScore(a):
+    # as third index is score
+    return a[3]
 
 
 if __name__=="__main__":
