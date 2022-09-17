@@ -113,9 +113,10 @@ def logout():
 @app.route("/donor", methods=["GET", "POST"])
 # Donor view
 def donor():
+    form = request.form
     if request.method == "POST":
         # Show info once ping is clicked
-        return None
+        return redirect("/donation_confirmation")
 
     # Pull receiver data from database
     db = sqlite3.connect("donations")
@@ -137,13 +138,9 @@ def donor():
 
     for index, row in df.iterrows():
         locations.append((row["x"], row["y"], row['object'], row['cause']))
-    
-    encoded = json.dumps(locations)
-    print(encoded)
 
     # Render map + Receiver pings
-    return render_template("donor_map.html", locations=encoded)
-
+    return render_template("donor_map.html", locations=locations, form=form)
 
 
 @app.route("/receiver_form", methods=["GET", "POST"])
@@ -207,7 +204,7 @@ def receiver_map():
                         x = {latitude},
                         y = {longitude}
                     WHERE
-                        user_id = {user_id}
+                        donation_id = {session.get('donation_id')}
                     ''')
             
             db.commit()
