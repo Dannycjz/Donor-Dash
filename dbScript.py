@@ -61,4 +61,4 @@ df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'u
 
 
 # db.commit()
-# print(df)
+print(df)

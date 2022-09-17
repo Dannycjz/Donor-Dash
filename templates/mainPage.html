@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Donor Dash!</title>
-    <link href="ddstyles.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ url_for('static', filename='ddstyles.css') }}" rel="stylesheet"/>
     <h1 class="welcome">
      🆓 Donor Dash 🆓
     </h1>
@@ -16,9 +16,9 @@
         <li><a href="#">Contact</a></li>
       </ul>
     <div class="donors">
-       <button class="button" type="submit" value="Donor"><span>Become Donor</span></button>
+       <a href="/donor" class="button">Become Donor</a>
     </div>
     <div class="receivers">
-      <button class="button" type="submit" value="Beneficiary"><span>Become Beneficiary</span></button>
+      <a href="/receiver_form" class="button">Become Beneficiary</a>
     </div>
   </body>
