@@ -31,9 +31,15 @@
       }).setView([40.441, -79.945], 3)
       map.setZoom(16);
 
-      var marker = L.marker([40.441, -79.945]).addTo(map);
-      marker.bindPopup("<b>New Event</b><br>A bulk of deers are here!<br><br><button>View Details</button>");
-      var popup = L.popup();
+      let locations = JSON.parse("{{encoded}}"); 
+      let markers = []; 
+      counsel.log(locations); 
+
+      for (var i = 0; i < markers.length; i++){
+        var marker = L.marker([40.441, -79.945]).addTo(map);
+        marker.bindPopup("<b>New Event</b><br>A bulk of deers are here!<br><br><button>View Details</button>");
+        var popup = L.popup();
+      }
 
     function onMapClick(e) {
     popup
