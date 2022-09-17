@@ -66,5 +66,10 @@ cursor.execute(f'''
 #     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
 
+<<<<<<< HEAD
 db.commit()
 #print(df)
+=======
+# db.commit()
+print(df)
+>>>>>>> c00979f77f1a81ddb4def789e9692e584bf575a1
