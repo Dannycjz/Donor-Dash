@@ -15,12 +15,13 @@ def login_required(f):
 # Form class
 # From https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/
 class RegistrationForm(Form):
-    username = StringField('username', [validators.DataRequired()])
-    password = PasswordField('password', [
+    name = StringField('Name', [validators.InputRequired(), validators.Length(min=1, max=50)], render_kw={"placeholder": "Name", "class": "form-control"})
+    password = PasswordField('Password', [
         validators.DataRequired(),
+        validators.Length(min=6),
         validators.EqualTo('confirm', message='Passwords must match')
-    ])
-    confirm = PasswordField('Repeat Password')
+    ], render_kw={"placeholder": "Password", "class": "form-control"})
+    confirm = PasswordField('Retype password', [validators.InputRequired()], render_kw={"placeholder": "Retype Password", "class": "form-control"})
 
 # Form class
 # From https://flask.palletsprojects.com/en/2.0.x/patterns/wtforms/
