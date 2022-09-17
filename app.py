@@ -7,6 +7,7 @@ from tempfile import mkdtemp
 from sqlite3 import Error
 import pandas as pd
 from wtforms import Form, BooleanField, StringField, PasswordField, validators
+import json
 
 from app_helper import login_required, RegistrationForm, LoginForm
 
@@ -112,6 +113,10 @@ def logout():
 @app.route("/donor", methods=["GET", "POST"])
 # Donor view
 def donor():
+    if request.method == "POST":
+        # Show info once ping is clicked
+        return None
+
     # Pull receiver data from database
     db = sqlite3.connect("donations")
     cursor = db.cursor()
@@ -127,12 +132,17 @@ def donor():
                                                 'donation_scores', 
                                                 'x', 
                                                 'y'])
+    
+    locations=[]
+
+    for index, row in df.iterrows():
+        locations.append((row["x"], row["y"], row['object'], row['cause']))
+    
+    encoded = json.dumps(locations)
+    print(encoded)
 
     # Render map + Receiver pings
-
-    # Show info once ping is clicked
-
-    return render_template("donor_map.html")
+    return render_template("donor_map.html", locations=encoded)
 
 
 
