@@ -67,7 +67,7 @@ def login():
     session.clear()
     
     form = LoginForm(request.form)
-    error=None
+    error = None
 
     # User reached route via POST
     if request.method=="POST":
@@ -113,12 +113,26 @@ def logout():
 # Donor view
 def donor():
     # Pull receiver data from database
+    db = sqlite3.connect("donations")
+    cursor = db.cursor()
+
+    cursor.execute('''
+                SELECT * FROM donations
+                ''')
+    
+    df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 
+                                                'object', 
+                                                'cause', 
+                                                'user_id', 
+                                                'donation_scores', 
+                                                'x', 
+                                                'y'])
 
     # Render map + Receiver pings
 
     # Show info once ping is clicked
 
-    return None
+    return render_template("donor_map.html")
 
 @app.route("/receiver_form", methods=["GET", "POST"])
 # View for receiver to fill out form
@@ -145,6 +159,7 @@ def receiver_form():
         db.commit()
         return redirect("/receiver_map")
 
+
 @app.route("/receiver_submit", methods=["POST"])
 def receiver_submit():
     if request.method == "POST":
@@ -159,7 +174,9 @@ def receiver_map():
     # Stores the user's geolocation into database
 
     # Returns render template of end page after storing data
+
     return "Here is the map for you to select the location"
+
 
 
 

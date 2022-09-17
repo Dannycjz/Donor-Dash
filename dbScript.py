@@ -59,5 +59,6 @@ df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'u
 #                 ''')
 #     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
+
 # db.commit()
-print(df)
+# print(df)
