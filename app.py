@@ -136,7 +136,7 @@ def donor():
     locations=[]
 
     for index, row in df.iterrows():
-        locations.append(row["x"], row["y"], row['object'], row['cause'])
+        locations.append((row["x"], row["y"], row['object'], row['cause']))
     
     encoded = json.dumps(locations)
 
