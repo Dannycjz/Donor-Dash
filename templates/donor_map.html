@@ -37,7 +37,7 @@
 
       for (var i = 0; i < locations.length; i++){
         var marker = new L.marker([locations[i][0], locations[i][1]]).addTo(map);
-        marker.bindPopup("<b>Request</b><br>" + locations[i][2] + "<br>" + locations[i][3] + "<br><button>Donate</button>");
+        marker.bindPopup("<form method=post><input type='hidden' id='difficulty' name='difficulty' value=" + locations[i][4] + "></input><b>Request</b><br>" + locations[i][2] + "<br>" + locations[i][3] + "<br><button>Donate</button></a><form>");
         var popup = L.popup();
       }
 
