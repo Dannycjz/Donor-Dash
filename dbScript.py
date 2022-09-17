@@ -16,7 +16,7 @@ cursor.execute('''
 cursor.execute('''
          INSERT INTO users (user_id, user_name, password, user_score)
          VALUES
-         ("1", 'Rex', 'rexrex', '20')
+         ("3", 'er', 'rexrex', '200')
          ''')
 
 # cursor.execute('''
@@ -42,7 +42,7 @@ cursor.execute('''
 cursor.execute('''
          INSERT INTO donations (object, cause, user_id, donation_scores, x, y)
          VALUES
-         ('kidney', 'help ppl with no kidney', '1', '20', '5', '10')
+         ('kisssey', 'helpsssidney', '3', '100', '5', '10')
          ''')
 
 # cursor.execute(f'''
