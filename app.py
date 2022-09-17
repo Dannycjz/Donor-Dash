@@ -139,6 +139,7 @@ def donor():
         locations.append((row["x"], row["y"], row['object'], row['cause']))
     
     encoded = json.dumps(locations)
+    print(encoded)
 
     # Render map + Receiver pings
     return render_template("donor_map.html", locations=encoded)
