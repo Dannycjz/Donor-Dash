@@ -120,13 +120,26 @@ def donor():
 @app.route("/receiver_form")
 # View for receiver to fill out form
 def receiver_form():
+    # User reached route via POST
+    if request.method == "POST":
     # Displays html form for receiver
 
     # Loads data into database
 
+        return None
     return None
 
-@app.route("")
+@app.route("/receiver_map")
+# Map view for receiver to ping location
+def receiver_map():
+    # Renders the empty map image
+
+    # Stores the user's geolocation into database
+
+    # Returns render template of end page after storing data
+    return None 
+
+
 
 
 
