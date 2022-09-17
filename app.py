@@ -109,7 +109,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/donor")
+@app.route("/donor", methods=["GET", "POST"])
 # Donor view
 def donor():
     # Pull receiver data from database
@@ -160,27 +160,43 @@ def receiver_form():
         return redirect("/receiver_map")
 
 
-@app.route("/receiver_submit", methods=["POST"])
+@app.route("/receiver_submit", methods=["GET", "POST"])
 def receiver_submit():
     if request.method == "POST":
         return None
 
 
-@app.route("/receiver_map")
+@app.route("/receiver_map", methods=["GET", "POST"])
 # Map view for receiver to ping location
 def receiver_map():
-    # Renders the empty map image
+    form = request.form
+    if request.method == "POST":
+        # Only add to database if user confirms
+        if form.get("confirmation"):
+            # Parse location data
+            latitude = request.json["latitude"]
+            longitude = request.json["longitude"]
 
-    # Stores the user's geolocation into database
+            user_name = session.get('user_id')[1]
 
-    # Returns render template of end page after storing data
+            # Stores the user's geolocation into database
+            db = sqlite3.connect("donations")
+            cursor = db.cursor
 
-    return "Here is the map for you to select the location"
+            cursor.execute(f'''
+                    UPDATE donations
+                    SET 
+                        x = {latitude},
+                        y = {longitude}
+                    WHERE
+                        user_name = {user_name}
+                    ''')
 
+            # Returns render template of end page after storing data
+        
 
-
-
-
+    # Renders the empty map image if method = GET
+    return render_template("receiver_map.html", form=form)
 
 if __name__=="__main__":
     app.run()
