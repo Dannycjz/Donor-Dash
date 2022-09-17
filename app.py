@@ -106,7 +106,7 @@ def logout():
     # Redirect user to login form
     return redirect("/")
 
-@app.route("/donor")
+@app.route("/donor", methods=["GET", "POST"])
 # Donor view
 def donor():
     # Pull receiver data from database
@@ -131,7 +131,7 @@ def donor():
 
     return render_template("donor_map.html")
 
-@app.route("/receiver_form", methods=["GET"])
+@app.route("/receiver_form", methods=["GET", "POST"])
 # View for receiver to fill out form
 def receiver_form():
     # Opens up the form for the user to use
@@ -139,21 +139,43 @@ def receiver_form():
         return render_template('formAdmin.html')
 
 
-@app.route("/receiver_submit", methods=["POST"])
+@app.route("/receiver_submit", methods=["GET", "POST"])
 def receiver_submit():
     if request.method == "POST":
         return None
 
 
-@app.route("/receiver_map")
+@app.route("/receiver_map", methods=["GET", "POST"])
 # Map view for receiver to ping location
 def receiver_map():
-    # Renders the empty map image
+    form = request.form
+    if request.method == "POST":
+        # Only add to database if user confirms
+        if form.get("confirmation"):
+            # Parse location data
+            latitude = request.json["latitude"]
+            longitude = request.json["longitude"]
 
-    # Stores the user's geolocation into database
+            user_name = session.get('user_id')[1]
 
-    # Returns render template of end page after storing data
-    return None
+            # Stores the user's geolocation into database
+            db = sqlite3.connect("donations")
+            cursor = db.cursor
+
+            cursor.execute(f'''
+                    UPDATE donations
+                    SET 
+                        x = {latitude},
+                        y = {longitude}
+                    WHERE
+                        user_name = {user_name}
+                    ''')
+
+            # Returns render template of end page after storing data
+        
+
+    # Renders the empty map image if method = GET
+    return render_template("receiver_map.html", form=form)
 
 if __name__=="__main__":
     app.run()

@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Map
+{% endblock %}
+
+{% block main %}
+    <div id="map"></div>
+    <link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 90vh;
+        width: calc(100vw - 1px);
+      }
+    </style> 
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js">
+    </script>
+    <!-- Download leaflet.ajax plugin from
+      https://cdnjs.com/libraries/leaflet-ajax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet- ajax/2.1.0/leaflet.ajax.min.js" integrity="sha512-Abr21JO2YqcJ03XGZRPuZSWKBhJpUAR6+2wH5zBeO4wAw4oksr8PRdF+BKIRsxvCdq+Mv4670rZ+dLnIyabbGw==" crossorigin="anonymous"></script>
+    
+    <script>
+      var world_street_map = L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri,   DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+      });
+      // Initialize the map
+      var map = L.map('map', {
+        layers: [world_street_map], // Default basemap
+      }).setView([40.441, -79.945], 3)
+      map.setZoom(16);
+
+    function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("<input type='checkbox' id='confirmation' name='confirmation'></input><label for='confirmation'> Please confirm your location?</label><br><button>Submit</button>")
+        .openOn(map);
+        var marker2 = L.marker(e.latlng).addTo(map);
+        marker2.bindPopup("<b>Your Location</b><button>View Details</button>");
+        $.ajax({
+            type: 'POST', 
+            url: '/receiver_form', 
+            data: {"latitude": e.latlng.lat, "longitude": e.latlng.lng}
+        })
+    }
+    map.on('click', onMapClick);
+
+    </script>
+{% endblock %}
