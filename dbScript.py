@@ -55,9 +55,10 @@ df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 'object', 'cause', 'u
 
 for user_id in df.user_id:
     cursor.execute(f'''
-                SELECT * FROM donations WHERE user_id = {user_id}
+                SELECT * FROM users WHERE user_id = {user_id}
                 ''')
     df2 = pd.DataFrame(cursor.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
+    print(df2)
 
 # db.commit()
-print(df)
+# print(df)
