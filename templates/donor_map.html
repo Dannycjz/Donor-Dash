@@ -32,15 +32,7 @@
       map.setZoom(16);
 
       var marker = L.marker([40.441, -79.945]).addTo(map);
-      var circle = L.circle([40.445, -79.945], {
-        color: 'red',
-        fillColor: '#f03',
-        fillOpacity: 0.5,
-        radius: 200
-      }).addTo(map);
       marker.bindPopup("<b>New Event</b><br>A bulk of deers are here!<br><br><button>View Details</button>");
-    //   .openPopup();
-      circle.bindPopup("More dramas at <b>Tepper School of Business</b>");
       var popup = L.popup();
 
     function onMapClick(e) {
