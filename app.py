@@ -20,13 +20,15 @@ Session(app)
 
 @app.route('/')
 def homepage():
-    return render_template("index.html")
+    if not session.get('user_id'):
+            return redirect('/login')
+    return render_template("mainPage.html")
 
 @app.route('/register', methods=["GET", "POST"])
 # Registers a new user
 def register():
     # Configures SQLite database
-    db=sqlite3.connect("chess")
+    db=sqlite3.connect("donations")
     c=db.cursor()
     
     # Forgets any existing userID
@@ -34,37 +36,38 @@ def register():
 
     form = RegistrationForm(request.form)
     
-    # User reached route via POST
-    if request.method=="POST" and form.validate():
+    try:
+        form = RegistrationForm(request.form)
+        if (request.method == 'POST' and form.validate()):
+            username=form.name.data
+            password=form.password.data
 
-        username=form.username.data
-        password=form.password.data
+            script="INSERT INTO users (user_name, password) VALUES (?, ?)"
+            values=(username, password)
+            # Insert user info into database
+            c.execute(script, values)
+            db.commit()
+            return redirect('/login')
+        return render_template('registerNew.html', form=form)
 
-        script="INSERT INTO users (user_name, password) VALUES (?, ?)"
-        values=(username, password)
-        # Insert user info into database
-        c.execute(script, values)
-        db.commit()
+    except Exception as e:
+        print("register info ERROR : " , str(e))
+        return "register info ERROR : " + str(e)
 
-        # Redirect the user back to the homepage
-        return redirect('/')
-    # User reached route via GET
-    else:
-        return render_template("register.html", form=form)
 
 @app.route('/login', methods=["GET", "POST"])
 # Logs the user in
 def login():
 
     # Configures SQLite database
-    db=sqlite3.connect("chess")
+    db=sqlite3.connect("donations")
     c=db.cursor()
     
     # Forget any current user_id
     session.clear()
     
     form = LoginForm(request.form)
-    error=None
+    error = None
 
     # User reached route via POST
     if request.method=="POST":
@@ -77,7 +80,7 @@ def login():
         c.execute(script, [username])
 
         # Loads SQLite object into a dataframe
-        df=pd.DataFrame(c.fetchall(), columns=['user_id', 'user_name', 'password'])
+        df=pd.DataFrame(c.fetchall(), columns=['user_id', 'user_name', 'password', 'user_score'])
 
         if len(df)==0:
             error = 'Invalid username'
@@ -90,11 +93,11 @@ def login():
                 error = 'Invalid password'
             else:
                 flash('You were successfully logged in')
-                session["user_id"]=user_data[0]
+                session["user_id"]= (user_data[0], user_data[1])
                 # Redirect user to home page
                 return redirect("/")
     
-    return render_template("login.html", form=form, error=error)
+    return render_template("loginNew.html", form=form, error=error)
 
 @app.route("/logout")
 # Logs the user out
@@ -104,9 +107,96 @@ def logout():
     session.clear()
 
     # Redirect user to login form
-    return redirect("/")
+    return redirect("/login")
+
+@app.route("/donor", methods=["GET", "POST"])
+# Donor view
+def donor():
+    # Pull receiver data from database
+    db = sqlite3.connect("donations")
+    cursor = db.cursor()
+
+    cursor.execute('''
+                SELECT * FROM donations
+                ''')
+    
+    df=pd.DataFrame(cursor.fetchall(), columns=['donation_id', 
+                                                'object', 
+                                                'cause', 
+                                                'user_id', 
+                                                'donation_scores', 
+                                                'x', 
+                                                'y'])
+
+    # Render map + Receiver pings
+
+    # Show info once ping is clicked
+
+    return render_template("donor_map.html")
+
+@app.route("/receiver_form", methods=["GET", "POST"])
+# View for receiver to fill out form
+def receiver_form():
+    # if not session.get('user_id'):
+    #         return redirect('/login')
+    # Opens up the form for the user to use
+    if request.method == "GET":
+        return render_template('formAdmin.html', name = session.get('user_id')[1])
+    if request.method == "POST":
+        db=sqlite3.connect("donations")
+        c=db.cursor()
+
+        form = request.form
+        print(form)
+
+        script='''INSERT INTO donations 
+                (object, cause, user_id, donation_scores, x, y) 
+                    VALUES 
+                    (?, ?, ?, ?, ?, ?)'''
+        values=(form['object'], form['cause'], session.get('user_id'), form['donation_scores'], None, None)
+        # Insert donation info into database
+        c.execute(script, values)
+        db.commit()
+        return redirect("/receiver_map")
 
 
+@app.route("/receiver_submit", methods=["GET", "POST"])
+def receiver_submit():
+    if request.method == "POST":
+        return None
+
+
+@app.route("/receiver_map", methods=["GET", "POST"])
+# Map view for receiver to ping location
+def receiver_map():
+    form = request.form
+    if request.method == "POST":
+        # Only add to database if user confirms
+        if form.get("confirmation"):
+            # Parse location data
+            latitude = request.json["latitude"]
+            longitude = request.json["longitude"]
+
+            user_name = session.get('user_id')[1]
+
+            # Stores the user's geolocation into database
+            db = sqlite3.connect("donations")
+            cursor = db.cursor
+
+            cursor.execute(f'''
+                    UPDATE donations
+                    SET 
+                        x = {latitude},
+                        y = {longitude}
+                    WHERE
+                        user_name = {user_name}
+                    ''')
+
+            # Returns render template of end page after storing data
+        
+
+    # Renders the empty map image if method = GET
+    return render_template("receiver_map.html", form=form)
 
 if __name__=="__main__":
     app.run()

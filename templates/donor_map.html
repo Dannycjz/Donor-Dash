@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Map
+{% endblock %}
+
+{% block main %}
+    <div id="map"></div>
+    <link rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+      #map {
+        height: 90vh;
+        width: calc(100vw - 1px);
+      }
+    </style> 
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js">
+    </script>
+    <!-- Download leaflet.ajax plugin from
+      https://cdnjs.com/libraries/leaflet-ajax -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet- ajax/2.1.0/leaflet.ajax.min.js" integrity="sha512-Abr21JO2YqcJ03XGZRPuZSWKBhJpUAR6+2wH5zBeO4wAw4oksr8PRdF+BKIRsxvCdq+Mv4670rZ+dLnIyabbGw==" crossorigin="anonymous"></script>
+    
+    <script>
+      var world_street_map = L.tileLayer('http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri &mdash; Source: Esri,   DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012'
+      });
+      // Initialize the map
+      var map = L.map('map', {
+        layers: [world_street_map], // Default basemap
+      }).setView([40.441, -79.945], 3)
+      map.setZoom(16);
+
+      var marker = L.marker([40.441, -79.945]).addTo(map);
+      marker.bindPopup("<b>New Event</b><br>A bulk of deers are here!<br><br><button>View Details</button>");
+      var popup = L.popup();
+
+    function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("Did you discover something interesting here?<br><input type='text'></input><button>Submit</button>")
+        .openOn(map);
+        var marker2 = L.marker(e.latlng).addTo(map);
+        marker2.bindPopup("<b>New Event Reported By You</b><br>UC having free coffee<br><br><button>View Details</button>");
+
+      }
+    map.on('click', onMapClick);
+
+    </script>
+{% endblock %}
