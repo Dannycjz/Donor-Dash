@@ -22,7 +22,7 @@ Session(app)
 def homepage():
     if not session.get('user_id'):
             return redirect('/login')
-    return render_template("index.html")
+    return render_template("mainPage.html")
 
 @app.route('/register', methods=["GET", "POST"])
 # Registers a new user
@@ -107,7 +107,7 @@ def logout():
     session.clear()
 
     # Redirect user to login form
-    return redirect("/")
+    return redirect("/login")
 
 @app.route("/donor", methods=["GET", "POST"])
 # Donor view
